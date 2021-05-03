@@ -10,6 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="haarcascades\haarcascade_frontalface_default.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="tessdata\rus.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

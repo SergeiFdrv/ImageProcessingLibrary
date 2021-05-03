@@ -11,7 +11,7 @@ namespace ImageToTextLibrary
 {
     public class Converter
     {
-        public string DetectText(string imgPath)
+        public static string DetectText(string imgPath)
         {
             string text;
             using (var img = new Image<Bgr, byte>(imgPath))
@@ -28,14 +28,16 @@ namespace ImageToTextLibrary
             return text;
         }
 
-        public bool DetectFace(string path)
+        public static Rectangle[] DetectFace(string imgPath)
         {
-            /*
-            var HaarCascadeXML = new HaarCascade("haarcascade_frontalface_alt.xml");
-            var faces = HaarCascadeXML.Detect(face, 1.1, 10, HAAR_DETECTION_TYPE.DO_CANNY_PRUNING,
-                                              new Size(20, 20), new Size(BaseImage.Width, BaseImage.Height));
-            */
-            return true;
+            string haar = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\haarcascades\";
+            using var faceCascadeClassifier = new CascadeClassifier(haar + @"haarcascade_frontalface_default.xml");
+            // Файлы каскадов: https://github.com/opencv/opencv/tree/master/data/haarcascades
+            using Image<Gray, byte> grayscaleImage = new Image<Gray, byte>(imgPath);
+            grayscaleImage._EqualizeHist();
+            var facesDetected = faceCascadeClassifier.DetectMultiScale(grayscaleImage, minNeighbors: 2);
+
+            return facesDetected;
         }
     }
 }
